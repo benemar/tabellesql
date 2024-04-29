@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Descrizione della Creazione di Tabelle Correlate in SQL</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        line-height: 1.6;
+        display: flex;
+    }
+.sidebar {
+    width: 300px; /* Larghezza del menu laterale */
+    background-color: #f4f4f4;
+    padding: 20px;
+    border-right: 1px solid #ddd;
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    overflow-y: auto;
+    padding-bottom: 20px;
+}
+
+.container {
+    flex: 1;
+    padding: 20px;
+    margin-left: 320px; /* Larghezza del menu laterale + margine */
+}
+    h1, h2 {
+        color: #007bff;
+    }
+    p {
+        margin-bottom: 20px;
+    }
+    pre {
+        background-color: #f4f4f4;
+        padding: 10px;
+        border-radius: 5px;
+        font-family: Consolas, monospace;
+        font-size: 14px;
+    }
+</style>
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>Menu</h2>
+    <ul>
+        <li><a href="#introduzione">Introduzione</a></li>
+        <li><a href="#creazione-tabelle">Creazione di Tabelle Correlate</a></li>
+        <li><a href="#esempio">Esempio di Creazione di Tabelle Correlate</a></li>
+        <li><a href="#eliminazione-tabella">Eliminazione di una Tabella e Ripercussioni</a></li>
+    </ul>
+</div>
+
+<div class="container">
+    <h1>Descrizione della Creazione di Tabelle Correlate in SQL</h1>
+    
+    <h2 id="introduzione">Introduzione</h2>
+    <p>
+        Le tabelle correlate in SQL rappresentano una parte fondamentale del database relazionale. Una tabella correlata si riferisce a una tabella che è collegata a un'altra tabella attraverso una relazione definita da chiavi primarie e chiavi esterne.
+    </p>
+
+    <h2 id="creazione-tabelle">Creazione di Tabelle Correlate</h2>
+    <p>
+        Per creare tabelle correlate in SQL, è necessario seguire alcuni passaggi chiave:
+    </p>
+    <ol>
+        <li>
+            <strong>Definizione delle Tabelle:</strong> Inizia definendo le tabelle coinvolte nella relazione. Ogni tabella dovrebbe avere una chiave primaria che identifica univocamente ogni riga.
+        </li>
+        <li>
+            <strong>Creazione della Chiave Esterna:</strong> Dopo aver definito le tabelle, identifica la chiave esterna nella tabella figlio che fa riferimento alla chiave primaria nella tabella padre. Questo crea un vincolo che mantiene l'integrità referenziale tra le tabelle.
+        </li>
+        <li>
+            <strong>Utilizzo delle Tabelle Correlate:</strong> Una volta create le tabelle correlate, puoi eseguire query complesse che coinvolgono entrambe le tabelle. Questo ti consente di estrarre dati da più tabelle contemporaneamente, utilizzando la relazione tra di esse.
+        </li>
+    </ol>
+
+    <h2 id="esempio">Esempio di Creazione di Tabelle Correlate</h2>
+    <p>
+        Di seguito è riportato un esempio di SQL per la creazione di tabelle correlate:
+    </p>
+    <pre><code>
+CREATE TABLE Dipartimento (
+    DipartimentoID INT PRIMARY KEY,
+    Nome VARCHAR(255)
+);
+
+CREATE TABLE Dipendente (
+    DipendenteID INT PRIMARY KEY,
+    Nome VARCHAR(255),
+    DipartimentoID INT,
+    FOREIGN KEY (DipartimentoID) REFERENCES Dipartimento(DipartimentoID)
+);
+    </code></pre>
+
+    <p>
+        In questo esempio, la tabella "Dipendente" ha una chiave esterna "DipartimentoID" che fa riferimento alla chiave primaria "DipartimentoID" nella tabella "Dipartimento". Ciò indica che ogni dipendente è associato a un dipartimento specifico.
+    </p>
+    
+    <h2 id="eliminazione-tabella">Eliminazione di una Tabella e Ripercussioni</h2>
+<p>
+    Quando elimini una tabella correlata in SQL, è importante considerare le ripercussioni sull'altra tabella correlata.
+</p>
+<p>
+    Ci sono diverse opzioni di eliminazione di una tabella, ognuna con le proprie implicazioni:
+</p>
+<ul>
+    <li>
+        <strong>ON DELETE CASCADE:</strong> Se imposti l'opzione ON DELETE CASCADE per la chiave esterna, ogni volta che viene eliminata una riga dalla tabella padre, tutte le righe corrispondenti nella tabella figlio vengono eliminate automaticamente.
+    <p>
+    Di seguito è riportato un esempio di codice SQL che definisce una tabella con una relazione di chiave esterna e l'opzione ON DELETE CASCADE:
+</p>
+
+<pre>
+<code>
+-- Creazione della tabella genitore
+CREATE TABLE TabellaGenitore (
+    ID INT PRIMARY KEY,
+    Nome VARCHAR(50)
+);
+
+-- Creazione della tabella figlio con chiave esterna referenziata alla tabella genitore
+CREATE TABLE TabellaFiglio (
+    ID INT PRIMARY KEY,
+    Dettaglio VARCHAR(50),
+    GenitoreID INT,
+    FOREIGN KEY (GenitoreID) REFERENCES TabellaGenitore(ID) ON DELETE CASCADE
+);
+</code>
+</pre>
+    </li>
+    <li>
+        <strong>ON DELETE SET NULL:</strong> Con questa opzione, se viene eliminata una riga dalla tabella padre, il valore corrispondente nella tabella figlio viene impostato su NULL. Questo è utile quando una riga nella tabella figlio può esistere anche senza una corrispondente nella tabella padre.
+        <p>
+    Di seguito è riportato un esempio di codice SQL che definisce una tabella con una relazione di chiave esterna e l'opzione ON DELETE SET NULL:
+</p>
+
+<pre>
+<code>
+-- Creazione della tabella genitore
+CREATE TABLE TabellaGenitore (
+    ID INT PRIMARY KEY,
+    Nome VARCHAR(50)
+);
+
+-- Creazione della tabella figlio con chiave esterna referenziata alla tabella genitore
+CREATE TABLE TabellaFiglio (
+    ID INT PRIMARY KEY,
+    Dettaglio VARCHAR(50),
+    GenitoreID INT,
+    FOREIGN KEY (GenitoreID) REFERENCES TabellaGenitore(ID) ON DELETE SET NULL
+);
+</code>
+</pre>
+    </li>
+    <li>
+        <strong>ON DELETE SET DEFAULT:</strong> Simile a SET NULL, ma invece di impostare il valore su NULL, viene impostato a un valore di default specificato.
+   <p>
+    Di seguito è riportato un esempio di codice SQL che definisce una tabella con una relazione di chiave esterna e l'opzione ON DELETE SET DEFAULT:
+</p>
+
+<pre>
+<code>
+-- Creazione della tabella genitore
+CREATE TABLE TabellaGenitore (
+    ID INT PRIMARY KEY,
+    Nome VARCHAR(50)
+);
+
+-- Creazione della tabella figlio con chiave esterna referenziata alla tabella genitore
+CREATE TABLE TabellaFiglio (
+    ID INT PRIMARY KEY,
+    Dettaglio VARCHAR(50),
+    GenitoreID INT DEFAULT 0,
+    FOREIGN KEY (GenitoreID) REFERENCES TabellaGenitore(ID) ON DELETE SET DEFAULT
+);
+</code>
+</pre>     
+    </li>
+    <li>
+        <strong>ON DELETE RESTRICT:</strong> Questa opzione impedisce l'eliminazione di una riga dalla tabella padre se esistono righe corrispondenti nella tabella figlio. In pratica, impedisce la cancellazione della tabella padre finché ci sono righe figlio correlate.
+  <p>
+    Di seguito è riportato un esempio di codice SQL che definisce una tabella con una relazione di chiave esterna e l'opzione ON DELETE RESTRICT:
+</p>
+
+<pre>
+<code>
+-- Creazione della tabella genitore
+CREATE TABLE TabellaGenitore (
+    ID INT PRIMARY KEY,
+    Nome VARCHAR(50)
+);
+
+-- Creazione della tabella figlio con chiave esterna referenziata alla tabella genitore
+CREATE TABLE TabellaFiglio (
+    ID INT PRIMARY KEY,
+    Dettaglio VARCHAR(50),
+    GenitoreID INT,
+    FOREIGN KEY (GenitoreID) REFERENCES TabellaGenitore(ID) ON DELETE RESTRICT
+);
+</code>
+</pre>      
+    </li>
+</ul>
+
+</div>
+
+</body>
+</html>
+
