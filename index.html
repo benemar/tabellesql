@@ -41,6 +41,25 @@
         font-family: Consolas, monospace;
         font-size: 14px;
     }
+      table {
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+    table, th, td {
+        border: 1px solid black;
+        padding: 8px;
+    }
+    button {
+        margin-top: 20px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .containertable {
+        display: grid;
+        grid-template-columns: 1fr 1fr; /* Due colonne di larghezza uguale */
+        gap: 20px; /* Spazio tra le colonne */
+    }
 </style>
 </head>
 <body>
@@ -132,8 +151,80 @@ CREATE TABLE TabellaFiglio (
 );
 </code>
 </pre>
+<div class="containertable">
+    <div>
+        <h2>Tabella Genitore</h2>
+        <table id="tabellaGenitorePrima">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Nome1</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Nome2</td>
+                </tr>
+                <!-- Aggiungi altre righe se necessario -->
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h2>Tabella Figlio</h2>
+        <table id="tabellaFiglioPrima">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Dettaglio</th>
+                    <th>GenitoreID</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Dettaglio1</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Dettaglio2</td>
+                    <td>2</td>
+                </tr>
+                <!-- Aggiungi altre righe se necessario -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<button onclick="eliminaRiga()">Elimina Riga da Tabella Genitore</button>
+<button onclick="ricaricaTabelle()">Ricarica Tabelle</button>
+
+<script>
+function eliminaRiga() {
+    // Rimuovi la prima riga dalla tabella Genitore Prima
+    var tabellaGenitorePrima = document.getElementById("tabellaGenitorePrima");
+    tabellaGenitorePrima.deleteRow(1);
+
+    // Rimuovi la prima riga dalla tabella Figlio Prima
+    var tabellaFiglioPrima = document.getElementById("tabellaFiglioPrima");
+    tabellaFiglioPrima.deleteRow(1);
+}
+
+function ricaricaTabelle() {
+    // Effettua la ricarica delle tabelle Genitore e Figlio qui
+    location.reload(); // Ricarica la pagina
+}
+</script>
+<br><br>
     </li>
     <li>
+    
         <strong>ON DELETE SET NULL:</strong> Con questa opzione, se viene eliminata una riga dalla tabella padre, il valore corrispondente nella tabella figlio viene impostato su NULL. Questo è utile quando una riga nella tabella figlio può esistere anche senza una corrispondente nella tabella padre.
         <p>
     Di seguito è riportato un esempio di codice SQL che definisce una tabella con una relazione di chiave esterna e l'opzione ON DELETE SET NULL:
@@ -156,6 +247,85 @@ CREATE TABLE TabellaFiglio (
 );
 </code>
 </pre>
+
+<div class="containertable">
+    <div>
+        <h2>Tabella Genitore</h2>
+        <table id="tabellaGenitorePrimasetnull">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Nome1</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Nome2</td>
+                </tr>
+                <!-- Aggiungi altre righe se necessario -->
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h2>Tabella Figlio</h2>
+        <table id="tabellaFiglioPrimasetnull">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Dettaglio</th>
+                    <th>GenitoreID</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Dettaglio1</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Dettaglio2</td>
+                    <td>2</td>
+                </tr>
+                <!-- Aggiungi altre righe se necessario -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<button onclick="impostaNull()">Simula ON DELETE SET NULL</button>
+<button onclick="ricaricaTabelle()">Ricarica Tabelle</button>
+
+<script>
+function impostaNull() {
+    // Rimuovi tutte le righe dalla tabella Genitore Prima
+    var tabellaGenitorePrimasetnull = document.getElementById("tabellaGenitorePrimasetnull");
+    var righeGenitore = tabellaGenitorePrimasetnull.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+    while (righeGenitore.length > 0) {
+        righeGenitore[0].parentNode.removeChild(righeGenitore[0]);
+    }
+
+    // Imposta il valore a NULL nella tabella Figlio Prima
+    var tabellaFiglioPrimasetnull = document.getElementById("tabellaFiglioPrimasetnull");
+    var righeFiglio = tabellaFiglioPrimasetnull.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+    for (var i = 0; i < righeFiglio.length; i++) {
+        righeFiglio[i].getElementsByTagName("td")[2].innerText = "null"; // Imposta il valore a null
+    }
+}
+
+function ricaricaTabelle() {
+    // Effettua la ricarica delle tabelle Genitore e Figlio qui
+    location.reload(); // Ricarica la pagina
+}
+</script>
+
+<br><br>
     </li>
     <li>
         <strong>ON DELETE SET DEFAULT:</strong> Simile a SET NULL, ma invece di impostare il valore su NULL, viene impostato a un valore di default specificato.
@@ -179,7 +349,81 @@ CREATE TABLE TabellaFiglio (
     FOREIGN KEY (GenitoreID) REFERENCES TabellaGenitore(ID) ON DELETE SET DEFAULT
 );
 </code>
-</pre>     
+</pre>   
+
+<div class="containertable">
+    <div>
+        <h2>Tabella Genitore</h2>
+        <table id="tabellaGenitorePrimasetdef">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Nome</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Nome1</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Nome2</td>
+                </tr>
+                <!-- Aggiungi altre righe se necessario -->
+            </tbody>
+        </table>
+    </div>
+
+    <div>
+        <h2>Tabella Figlio</h2>
+        <table id="tabellaFiglioPrimasetdef">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Dettaglio</th>
+                    <th>GenitoreID</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>1</td>
+                    <td>Dettaglio1</td>
+                    <td>1</td>
+                </tr>
+                <tr>
+                    <td>2</td>
+                    <td>Dettaglio2</td>
+                    <td>2</td>
+                </tr>
+                <!-- Aggiungi altre righe se necessario -->
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<button onclick="impostaDefault()">Simula ON DELETE SET DEFAULT</button>
+<button onclick="ricaricaTabelle()">Ricarica Tabelle</button>
+
+<script>
+function impostaDefault() {
+    // Rimuovi la prima riga dalla tabella Genitore Prima
+    var tabellaGenitorePrimasetdef = document.getElementById("tabellaGenitorePrimasetdef");
+    tabellaGenitorePrimasetdef.deleteRow(1);
+
+    // Imposta il valore di default nella tabella Figlio Prima
+    var tabellaFiglioPrimasetdef = document.getElementById("tabellaFiglioPrimasetdef");
+    var righeFiglio = tabellaFiglioPrimasetdef.getElementsByTagName("tbody")[0].getElementsByTagName("tr");
+    for (var i = 0; i < righeFiglio.length; i++) {
+        righeFiglio[i].getElementsByTagName("td")[2].innerText = "0"; // Imposta il valore di default a 0
+    }
+}
+
+function ricaricaTabelle() {
+    location.reload(); // Ricarica la pagina per ripristinare le tabelle originali
+}
+</script>
+  <br><br>
     </li>
     <li>
         <strong>ON DELETE RESTRICT:</strong> Questa opzione impedisce l'eliminazione di una riga dalla tabella padre se esistono righe corrispondenti nella tabella figlio. In pratica, impedisce la cancellazione della tabella padre finché ci sono righe figlio correlate.
@@ -203,7 +447,24 @@ CREATE TABLE TabellaFiglio (
     FOREIGN KEY (GenitoreID) REFERENCES TabellaGenitore(ID) ON DELETE RESTRICT
 );
 </code>
-</pre>      
+</pre>    
+<button onclick="visualizzaMessaggioErrore()">Simula Errore ON DELETE RESTRICT</button>
+<button onclick="nascondiMessaggioErrore()">Nascondi Messaggio di Errore</button>
+
+<p id="messaggioErrore" style="display: none; color: red;">ERROR 1451 (23000): Cannot delete or update a parent row: a foreign key constraint fails</p>
+
+<script>
+function visualizzaMessaggioErrore() {
+    var messaggioErrore = document.getElementById("messaggioErrore");
+    messaggioErrore.style.display = "block";
+}
+
+function nascondiMessaggioErrore() {
+    var messaggioErrore = document.getElementById("messaggioErrore");
+    messaggioErrore.style.display = "none";
+}
+</script>
+  <br><br><br>
     </li>
 </ul>
 
